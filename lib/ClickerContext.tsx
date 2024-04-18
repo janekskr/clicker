@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { Quantity } from "./types";
+import { Pickaxes } from "./constants";
 
 // Define types for context values
 interface ClickerContextType {
@@ -34,11 +35,22 @@ export const ClickerProvider = ({
   const [level, setLevel] = useState<number>(1);
   const [pickaxe, setPickaxe] = useState<number>(1);
 
+  const ownedPickaxes = [1]
+
   const reset = () => {
     setClicks(0);
     setClicks(0);
     setLevel(1);
   };
+
+  const buyPickaxe = (id: number) => {
+    const pickaxe = Pickaxes[id - 1]
+    if(vbucks >= pickaxe.price) {
+        ownedPickaxes.push(id)
+    } else {
+      alert("Brak vbucks")
+    }
+  }
 
   const buyVbucks = (quantity: Quantity) => {
     let requiredClicks = 0;
@@ -72,7 +84,7 @@ export const ClickerProvider = ({
     } else {
       alert("Masz za mało kliknięć");
     }
-  };
+  }
 
   const contextValue: ClickerContextType = {
     vbucks,
@@ -88,7 +100,7 @@ export const ClickerProvider = ({
   
 
   useEffect(() => {
-    if(clicks >= 100 && clicks % 100 === 0) {
+    if(clicks >= 100 && clicks >= level * 100) {
         setLevel(prev => prev +1)
     }
   }, [clicks])

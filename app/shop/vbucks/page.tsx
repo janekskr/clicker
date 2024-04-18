@@ -1,7 +1,7 @@
 import { VBucksCard } from '@/components'
 import { Vbucks } from '@/lib/constants'
 
-export default function BuyVbucks() {
+export default function BuyPickaxe() {
   return (
     <main className='bg-[url(/images/bg1.png)]'>
       <div className='w-[70%] h-[70%] flex flex-col gap-8 mt-[-60px]'>

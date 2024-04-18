@@ -11,7 +11,7 @@ const ProgressBar = () => {
     <div className="w-full flex gap-4 items-center">
       <div className="flex-1 h-6">
         <div
-          className="bg-fn-yellow h-full rounded-3xl"
+          className="bg-fn-yellow h-full rounded-3xl transition-all"
           style={{ width: `${progress}%` }}
         />
       </div>

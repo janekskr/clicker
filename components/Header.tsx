@@ -17,7 +17,7 @@ export default function Header() {
         <p>{clicks}</p>
       </li>
       <li className="flex items-center gap-4">
-        <Link href="/vbucks" className=" bg-fn-yellow text-black py-2 px-5 rounded-lg text-3xl">
+        <Link href="/shop/vbucks" className=" bg-fn-yellow text-black py-2 px-5 rounded-lg text-3xl">
           Kup
         </Link>
         <div className="flex items-center gap-3">

@@ -39,7 +39,7 @@ export default function Asside() {
           <div className="text-2xl text-white">
             {miner.level > 0  && <p>Poziom auto minera: {miner.level}</p>}
             <p>Koszt {miner.level > 0 ? "ulepszenia": "kupna"}: {calculateCost(miner.level)} V-bucks</p>
-            {miner.level > 0 && <p className="flex gap-1">{miner.benefit} <Image width={30} height={30} src="/images/vbucks.webp" alt="vbucks" /> / {(miner.duration / 1000).toFixed(2)}s</p>} 
+            {miner.level > 0 && <p className="flex gap-1">{miner.benefit} <Image width={30} height={30} src="/images/vbucks.webp" alt="vbucks" /> / {(miner.duration / 1000)}s</p>} 
             <button onClick={buyAutoMiner} className="bg-green-500 px-4 py-2 rounded-md mt-2">{miner.level > 0 ? "Ulepsz": "Kup"} Auto Miner</button>
           </div>
         </motion.aside>

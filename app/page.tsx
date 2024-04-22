@@ -10,11 +10,15 @@ import { useEffect, useRef } from "react";
 export default function Home() {
   const { setClicks, pickaxe, level } = useClicker();
 
-  const audio = useRef(new Audio("/sound.mp3"))
+  const audio = useRef<HTMLAudioElement | null>(null)
+
+  useEffect(() => {
+    audio.current = new Audio("/sound.mp3")
+  }, [])
 
   const handleClick = () => {
     setClicks((prev) => prev + level);
-    audio.current.play()
+    audio.current?.play()
   };
 
   return (

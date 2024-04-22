@@ -5,12 +5,16 @@ import { useClicker } from "@/lib/ClickerContext";
 import Image from "next/image";
 
 import { motion } from "framer-motion";
+import { useEffect, useRef } from "react";
 
 export default function Home() {
   const { setClicks, pickaxe, level } = useClicker();
 
+  const audio = useRef(new Audio("/sound.mp3"))
+
   const handleClick = () => {
     setClicks((prev) => prev + level);
+    audio.current.play()
   };
 
   return (

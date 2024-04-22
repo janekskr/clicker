@@ -38,9 +38,9 @@ export const ClickerProvider = ({
   const [pickaxe, setPickaxe] = useState<number>(1);
   const [ownedPickaxes, setOwnedPickaxes] = useState<number[]>([1]);
   const [miner, setMiner] = useState<Miner>({
-    duration: 5000,
-    benefit: 0.05,
-    level: 1,
+    duration: 2000,
+    benefit: 0,
+    level: 0,
   })
 
   const reset = () => {
@@ -54,8 +54,8 @@ export const ClickerProvider = ({
 
     if (vbucks >= cost) {
       const newLevel = miner.level + 1;
-      const newDuration = miner.duration * (1 - miner.benefit);
-      setMiner({ ...miner, level: newLevel, duration: newDuration });
+      const newBenefit = miner.benefit + 25
+      setMiner({ ...miner, level: newLevel, benefit: newBenefit });
       setVbucks((prev) => prev - cost);
     } else {
       alert("Masz za mało V-bucksów");
@@ -103,6 +103,16 @@ export const ClickerProvider = ({
     buyAutoMiner,
     miner
   };
+
+  useEffect(() => {
+    let miningInterval: NodeJS.Timeout;
+
+    if (miner.level > 0) {
+      miningInterval = setInterval(() => {
+        setClicks((prev) => prev + miner.benefit);
+      }, miner.duration);
+    }
+  }, [miner]);
 
   useEffect(() => {
     if (clicks >= 100 && clicks >= level * 100) {

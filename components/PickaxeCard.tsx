@@ -50,7 +50,7 @@ export default function PickaxeCard({
               initial={{ scale: 0, rotate: 180 }}
               animate={{ rotate: 0, scale: 1 }}
             >
-              ✔️
+              ✅
             </motion.p>
           </p>
         ) : owned ? (
@@ -64,8 +64,8 @@ export default function PickaxeCard({
             <Image
               src="/images/vbucks.webp"
               alt="vbucks"
-              width={40}
-              height={40}
+              width={35}
+              height={35}
             />
           </button>
         )}

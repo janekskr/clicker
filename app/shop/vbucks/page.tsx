@@ -8,7 +8,7 @@ export default function BuyPickaxe() {
         <h1 className='text-white text-5xl'>V-BUCKS</h1>
         <div className='grid grid-cols-4 gap-3 flex-1'>
           {
-            Vbucks.map(x => <VBucksCard price={x.price} quantity={x.quantity} id={x.id} />)
+            Vbucks.map(x => <VBucksCard price={x.price} quantity={x.quantity} id={x.id} key={x.id} />)
           }
         </div>
       </div>

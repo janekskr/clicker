@@ -1,10 +1,10 @@
 "use client";
 
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { Quantity } from "./types";
-import { Pickaxes } from "./constants";
+import { Miner } from "./types";
+import { Pickaxes, Vbucks } from "./constants";
+import { calculateCost } from "./utils";
 
-// Define types for context values
 interface ClickerContextType {
   vbucks: number;
   setVbucks: React.Dispatch<React.SetStateAction<number>>;
@@ -14,13 +14,15 @@ interface ClickerContextType {
   setClicks: React.Dispatch<React.SetStateAction<number>>;
   level: number;
   setLevel: React.Dispatch<React.SetStateAction<number>>;
-  buyVbucks: (quantity: Quantity) => void;
+  buyVbucks: (quantity: number) => void;
+  buyPickaxe: (id: number) => void;
+  ownedPickaxes: number[];
+  buyAutoMiner: () => void
+  miner: Miner
 }
 
-// Create context
 const ClickerContext = createContext({} as ClickerContextType);
 
-// Custom hook to access context values
 export const useClicker = (): ClickerContextType => {
   return useContext(ClickerContext);
 };
@@ -34,8 +36,12 @@ export const ClickerProvider = ({
   const [clicks, setClicks] = useState<number>(0);
   const [level, setLevel] = useState<number>(1);
   const [pickaxe, setPickaxe] = useState<number>(1);
-
-  const ownedPickaxes = [1]
+  const [ownedPickaxes, setOwnedPickaxes] = useState<number[]>([1]);
+  const [miner, setMiner] = useState<Miner>({
+    duration: 5000,
+    benefit: 0.05,
+    level: 1,
+  })
 
   const reset = () => {
     setClicks(0);
@@ -43,48 +49,44 @@ export const ClickerProvider = ({
     setLevel(1);
   };
 
-  const buyPickaxe = (id: number) => {
-    const pickaxe = Pickaxes[id - 1]
-    if(vbucks >= pickaxe.price) {
-        ownedPickaxes.push(id)
+  const buyAutoMiner = () => {
+    const cost = calculateCost(miner.level)
+
+    if (vbucks >= cost) {
+      const newLevel = miner.level + 1;
+      const newDuration = miner.duration * (1 - miner.benefit);
+      setMiner({ ...miner, level: newLevel, duration: newDuration });
+      setVbucks((prev) => prev - cost);
     } else {
-      alert("Brak vbucks")
+      alert("Masz za mało V-bucksów");
     }
-  }
+  };
 
-  const buyVbucks = (quantity: Quantity) => {
-    let requiredClicks = 0;
-    let vbucksToAdd = 0;
 
-    switch (quantity) {
-      case 1000:
-        requiredClicks = 64;
-        vbucksToAdd = 1000;
-        break;
-      case 2800:
-        requiredClicks = 160;
-        vbucksToAdd = 2800;
-        break;
-      case 5000:
-        requiredClicks = 254;
-        vbucksToAdd = 5000;
-        break;
-      case 13500:
-        requiredClicks = 640;
-        vbucksToAdd = 13500;
-        break;
-      default:
-        alert("Nieprawidłowa ilość V-bucks");
-        return;
+  const buyPickaxe = (id: number) => {
+    const pickaxe = Pickaxes[id - 1];
+    if (ownedPickaxes.includes(id)) {
+      alert("Już posiadasz ten kilof");
+      return;
     }
+    if (vbucks >= pickaxe.price) {
+      setOwnedPickaxes((prev) => [...prev, id]);
+      setVbucks((prev) => prev - pickaxe.price);
+    } else {
+      alert("Masz za mało V-bucksów");
+    }
+  };
 
-    if (clicks >= requiredClicks) {
-      setClicks((prev) => prev - requiredClicks);
-      setVbucks((prev) => prev + vbucksToAdd);
+  const buyVbucks = (id: number) => {
+    const vbuck = Vbucks[id - 1];
+
+    if (clicks >= vbuck.price) {
+      setClicks((prev) => prev - vbuck.price);
+      setVbucks((prev) => prev + vbuck.quantity);
     } else {
       alert("Masz za mało kliknięć");
     }
-  }
+  };
 
   const contextValue: ClickerContextType = {
     vbucks,
@@ -95,15 +97,18 @@ export const ClickerProvider = ({
     setLevel,
     buyVbucks,
     pickaxe,
-    setPickaxe
+    setPickaxe,
+    buyPickaxe,
+    ownedPickaxes,
+    buyAutoMiner,
+    miner
   };
-  
 
   useEffect(() => {
-    if(clicks >= 100 && clicks >= level * 100) {
-        setLevel(prev => prev +1)
+    if (clicks >= 100 && clicks >= level * 100) {
+      setLevel((prev) => prev + 1);
     }
-  }, [clicks])
+  }, [clicks]);
 
   return (
     <ClickerContext.Provider value={contextValue}>

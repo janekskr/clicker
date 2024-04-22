@@ -4,7 +4,7 @@ import Image from "next/image"
 import { VBucksCard as VBucksCardProps } from "@/lib/types"
 import { useClicker } from "@/lib/ClickerContext"
 
-export default function VBucksCard({price, quantity}: VBucksCardProps) {
+export default function VBucksCard({price, quantity, id}: VBucksCardProps) {
   const {buyVbucks} = useClicker()
   return (
     <div className='flex flex-col text-4xl text-white'>
@@ -17,7 +17,7 @@ export default function VBucksCard({price, quantity}: VBucksCardProps) {
                 <p>V-BUCKS</p>
             </div>
         </div>
-        <button className="bg-fn-yellow text-black p-4 text-center cursor-pointer" onClick={() => buyVbucks(quantity)}>
+        <button className="bg-fn-yellow text-black p-4 text-center cursor-pointer" onClick={() => buyVbucks(id)}>
            {price} klikniec
         </button>
     </div>
